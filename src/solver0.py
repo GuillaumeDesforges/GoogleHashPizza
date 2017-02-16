@@ -5,6 +5,7 @@ def solve(data):
     n_lines = meta[0]
     n_columns = meta[1]
     min_component = meta[2]
+    # max_slice_size equals zero if unlimited slice size
     max_slice_size = meta[3]
     # represent which cases have been used
     map_distributed = [[0 for i_column in range(n_columns)] for i_line in range(n_lines)]
@@ -12,9 +13,11 @@ def solve(data):
     # each time we iterate through a line to create slices, we record the max height of those
     line_max_height = 0
     current_valid_slice_id = 1
+    # look for max
+
     for i_line in range(n_lines):
-        # iteration through columns : skip columns that are given in slices
         for i_column in range(n_columns):
+            # if cell is not attributed to a slice
             if map_distributed[i_line][i_column] == 0:
                 # look for a valid slice
                 validSliceFound = False

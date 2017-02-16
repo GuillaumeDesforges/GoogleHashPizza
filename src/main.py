@@ -1,5 +1,4 @@
-from src import solver0
-
+from src import solver1
 
 def getData(name):
     with open("../assets/" + name + ".in", 'r') as file:
@@ -15,8 +14,8 @@ for name in [
     # "big"
 ]:
     data = getData(name)
-    result = solver0.solve(data)
-    output = solver0.getSlicesData(result)
+    result = solver1.solve(data)
+    output = solver1.getSlicesData(result)
     with open("../outputs/" + name + ".txt", 'w') as file:
         file.write(output)
     print("Done", name)
