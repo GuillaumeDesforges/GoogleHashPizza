@@ -1,3 +1,5 @@
+import sys
+
 def count(T, i):
     return sum(row.count(i) for row in T)
 
@@ -38,8 +40,17 @@ def get_density_array(data):
     # Initialisation du tableau de densité
     density = [[0 for i in range(n_columns)] for j in range(n_lines)]
 
+    # show progress
+    coordinates_counter = 0
+    max_coordinates_counter = n_lines * n_columns
+    next_percentage = 0
+
     for i_line in range(n_lines):
         for i_column in range(n_columns):
+            coordinates_counter += 1
+            if int((coordinates_counter / max_coordinates_counter) * 100) == next_percentage:
+                sys.stdout.write("\r" + str(int(coordinates_counter / max_coordinates_counter * 100)) + "%")
+                next_percentage += 1
             # Selectionne le carré de taille max_slice_size autour du point i_line, i_column
             # On met 0 = hors losange, 1=vide, 2=tomate et 3=champignon
             T = [[0 for i in range(2 * max_slice_size - 1)] for j in range(2 * max_slice_size - 1)]

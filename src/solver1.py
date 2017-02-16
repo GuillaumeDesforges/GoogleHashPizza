@@ -1,6 +1,6 @@
+import sys
 from src import density
 from src import slicer
-
 
 def solve(data):
     # extract data
@@ -17,42 +17,51 @@ def solve(data):
     # assign slices that cover a maximum of priority
     map_distribution = [[0 for c in l] for l in map_pizza]
     slice_id_counter = 1
+    # show progress
+    coordinates_counter = 0
+    max_coordinates_counter = n_lines * n_columns
+    next_percentage = 0
     for list_coordinates in ordered_coordinates_per_level:
         for coordinates in list_coordinates:
+            coordinates_counter += 1
+            if int((coordinates_counter / max_coordinates_counter) * 100) == next_percentage:
+                sys.stdout.write("\r" + str(int(coordinates_counter / max_coordinates_counter * 100)) + "%")
+                next_percentage += 1
             y, x = tuple(coordinates)
-            slices = slicer.get_all_local_slices(y, x, data)
-            # remove slices that contain at least one used cell
-            slices_to_remove = []
-            for slice in slices:
-                all_cells_unused = True
-                y0, x0, y1, x1 = tuple(slice)
-                for x in range(x0, x1 + 1):
-                    for y in range(y0, y1 + 1):
-                        if map_distribution[y][x] != 0:
-                            all_cells_unused = False
-                if not all_cells_unused:
-                    slices_to_remove.append(slice)
-            for slice_to_remove in slices_to_remove:
-                slices.remove(slice_to_remove)
-            # remove slices that doesn't contain enough of each components
-            slices = slicer.get_all_local_correct_slices(slices, min_component, map_pizza)
-            if len(slices) > 0:
-                # calculate slices scores
-                slices_score = [0 for k in slices]
-                for i, slice in enumerate(slices):
+            if map_distribution[y][x] == 0:
+                slices = slicer.get_all_local_slices(y, x, data)
+                # remove slices that contain at least one used cell
+                slices_to_remove = []
+                for slice in slices:
+                    all_cells_unused = True
                     y0, x0, y1, x1 = tuple(slice)
                     for x in range(x0, x1 + 1):
                         for y in range(y0, y1 + 1):
-                            slices_score[i] += map_density[y][x]
-                # get best slice
-                best_slice = slices[slices_score.index(max(slices_score))]
-                # apply slice to distribution
-                y0, x0, y1, x1 = tuple(best_slice)
-                for x in range(x0, x1 + 1):
-                    for y in range(y0, y1 + 1):
-                        map_distribution[y][x] = slice_id_counter
-                # increment slice id counter for next slice
-                slice_id_counter += 1
+                            if map_distribution[y][x] != 0:
+                                all_cells_unused = False
+                    if not all_cells_unused:
+                        slices_to_remove.append(slice)
+                for slice_to_remove in slices_to_remove:
+                    slices.remove(slice_to_remove)
+                # remove slices that doesn't contain enough of each components
+                slices = slicer.get_all_local_correct_slices(slices, min_component, map_pizza)
+                if len(slices) > 0:
+                    # calculate slices scores
+                    slices_score = [0 for k in slices]
+                    for i, slice in enumerate(slices):
+                        y0, x0, y1, x1 = tuple(slice)
+                        for x in range(x0, x1 + 1):
+                            for y in range(y0, y1 + 1):
+                                slices_score[i] += map_density[y][x]
+                    # get best slice
+                    best_slice = slices[slices_score.index(max(slices_score))]
+                    # apply slice to distribution
+                    y0, x0, y1, x1 = tuple(best_slice)
+                    for x in range(x0, x1 + 1):
+                        for y in range(y0, y1 + 1):
+                            map_distribution[y][x] = slice_id_counter
+                    # increment slice id counter for next slice
+                    slice_id_counter += 1
     return map_distribution
 
 
