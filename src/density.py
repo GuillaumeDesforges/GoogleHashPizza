@@ -32,8 +32,8 @@ def get_density_array(data):
     max_slice_size = meta[3]
 
     # On privilegie priorité uniformité vs priorité des bords si trouver une part est dur
-    # pizza_weight=min_component
-    pizza_weight = 1
+    pizza_weight = min_component
+    # pizza_weight = 1
 
     # Initialisation du tableau de densité
     density = [[0 for i in range(n_columns)] for j in range(n_lines)]

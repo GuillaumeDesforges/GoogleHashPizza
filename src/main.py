@@ -8,10 +8,10 @@ def getData(name):
 
 
 for name in [
-    "example",
-    "small",
+    # "example",
+    # "small",
     "medium",
-    "big"
+    #"big"
 ]:
     data = getData(name)
     result = solver1.solve(data)

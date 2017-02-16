@@ -19,9 +19,10 @@ def get_all_local_slices(y, x, data):
             j_current = x - (max_slice_size - 1) + j_column
             if 0 <= i_current and i_current < n_lines and 0 <= j_current and j_current < n_columns:
                 # l'aire, c'est le nombre de cellules dedans lol
-                area = abs(-(max_slice_size - 1) + i_line + 1) * abs(-(max_slice_size - 1) + j_column + 1)
+                y0, x0, y1, x1 = min(y, i_current), min(x, j_current), max(y, i_current), max(x, j_current)
+                area = (y1 - y0 + 1) * (x1 - x0 + 1)
                 if area >= 2 * min_component and area <= max_slice_size:
-                    slice_new = [min(y, i_current), min(x, j_current), max(y, i_current), max(x, j_current)]
+                    slice_new = [y0, x0, y1, x1]
                     slices_list.append(slice_new)
     return slices_list
 
