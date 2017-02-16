@@ -31,9 +31,11 @@ def solve(data):
                         if map_distribution[y][x] != 0:
                             all_cells_unused = False
                 if not all_cells_unused:
-                    slices_to_remove.append(i)
+                    slices_to_remove.append(slice)
             for slice_to_remove in slices_to_remove:
                 slices.remove(slice_to_remove)
+            # remove slices that doesn't contain enough of each components
+            slices = slicer.get_all_local_correct_slices(slices, min_component, map_pizza)
             if len(slices) > 0:
                 # calculate slices scores
                 slices_score = [0 for k in slices]

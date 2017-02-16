@@ -17,7 +17,7 @@ def get_all_local_slices(y, x, data):
         for j_column in range(2 * max_slice_size - 1):
             i_current = y - (max_slice_size - 1) + i_line
             j_current = x - (max_slice_size - 1) + j_column
-            if not i_current < 0 or i_current >= n_lines or j_current < 0 or j_current >= n_columns:
+            if 0 <= i_current and i_current < n_lines and 0 <= j_current and j_current < n_columns:
                 # l'aire, c'est le nombre de cellules dedans lol
                 area = abs(-(max_slice_size - 1) + i_line + 1) * abs(-(max_slice_size - 1) + j_column + 1)
                 if area >= 2 * min_component and area <= max_slice_size:
@@ -47,7 +47,8 @@ def get_all_local_correct_slices(slices_list, min_component, map_pizza):
     j = 0
     for i in range(len(slices_list)):
         A = count_number_of_each_in_slice(slices_list[j], map_pizza)
-        if A[0] < min_component or A[0] < min_component:
+        if A[0] < min_component or A[1] < min_component:
             del slices_list[j]
-        j += 1
+        else:
+            j += 1
     return slices_list
