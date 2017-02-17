@@ -1,6 +1,7 @@
 import sys
 from src import density
 from src import slicer
+from src import expander
 
 def solve(data):
     # extract data
@@ -8,16 +9,18 @@ def solve(data):
     map_pizza = data[1]
     n_lines = meta[0]
     n_columns = meta[1]
-    min_component = meta[2]
-    max_slice_size = meta[3]
+    # get prototypes of slices
+    slices_prototype = slicer.get_slices_prototype(meta)
     # calculate density map
+    print("Calculating density ...")
     map_density = density.get_density_array(data)
     # calculate order of search
     ordered_coordinates_per_level = density.organize_coordinates_by_level(map_density)
-    # assign slices that cover a maximum of priority
+    # assign slices that cover a maximum of mean priority
     map_distribution = [[0 for c in l] for l in map_pizza]
     slice_id_counter = 1
     # show progress
+    print("Assigning slices ...")
     coordinates_counter = 0
     max_coordinates_counter = n_lines * n_columns
     next_percentage = 0
@@ -29,7 +32,7 @@ def solve(data):
                 next_percentage += 1
             y, x = tuple(coordinates)
             if map_distribution[y][x] == 0:
-                slices = slicer.get_all_local_slices(y, x, data)
+                slices = slicer.get_all_local_slices(y, x, data, slices_prototype)
                 # remove slices that contain at least one used cell
                 slices_to_remove = []
                 for slice in slices:
@@ -44,7 +47,7 @@ def solve(data):
                 for slice_to_remove in slices_to_remove:
                     slices.remove(slice_to_remove)
                 # remove slices that doesn't contain enough of each components
-                slices = slicer.get_all_local_correct_slices(slices, min_component, map_pizza)
+                slices = slicer.get_all_local_correct_slices(slices, meta, map_pizza)
                 if len(slices) > 0:
                     # calculate slices scores
                     slices_score = [0 for k in slices]
@@ -53,6 +56,8 @@ def solve(data):
                         for x in range(x0, x1 + 1):
                             for y in range(y0, y1 + 1):
                                 slices_score[i] += map_density[y][x]
+                        area = (y1 - y0 + 1) * (x1 - x0 + 1)
+                        slices_score[i] /= area
                     # get best slice
                     best_slice = slices[slices_score.index(max(slices_score))]
                     # apply slice to distribution
@@ -62,6 +67,9 @@ def solve(data):
                             map_distribution[y][x] = slice_id_counter
                     # increment slice id counter for next slice
                     slice_id_counter += 1
+    # expand
+    print("Expanding (may take a while) ...")
+    expander.expand_slices_to_fullest(meta, ordered_coordinates_per_level, map_distribution)
     return map_distribution
 
 

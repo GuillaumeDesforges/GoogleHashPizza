@@ -45,6 +45,7 @@ def get_density_array(data):
     max_coordinates_counter = n_lines * n_columns
     next_percentage = 0
 
+    print("0%")
     for i_line in range(n_lines):
         for i_column in range(n_columns):
             coordinates_counter += 1
@@ -69,6 +70,7 @@ def get_density_array(data):
                             T[max_slice_size - 1 + x][max_slice_size - 1 + y] = 1
 
             density[i_line][i_column] = density_local_score(T)
+    sys.stdout.write("\r100%")
 
     return density
 

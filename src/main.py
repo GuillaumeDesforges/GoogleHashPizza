@@ -8,11 +8,12 @@ def getData(name):
 
 
 for name in [
-    # "example",
-    # "small",
-    # "medium",
+    "example",
+    "small",
+    "medium",
     "big"
 ]:
+    print("Starting", name)
     data = getData(name)
     result = solver1.solve(data)
     output = solver1.getSlicesData(result)
