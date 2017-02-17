@@ -1,9 +1,9 @@
 # renvoie une liste de toutes les parts possibles (et pas forcément valides!) contenant la cellule en y,x
 # une part = [y0,x0,y1,x1] en haut a gauche puis en bas a droite
 # 0 pour tomate, 1 pour mushroom ; map_pizza est deja en 0 et 1
-#on explore un carre de cote 2*max_size-1
-#a chaque fois, on regarde si l'aire du rectangle formé par le point choisi et y,x est correcte
-#si oui, on l'ajoute
+# on explore un carre de cote 2*max_size-1
+# a chaque fois, on regarde si l'aire du rectangle formé par le point choisi et y,x est correcte
+# si oui, on l'ajoute
 
 
 # créer les prototypes de parts en coordonnées relatives en fonction de la taille min/max
@@ -37,7 +37,8 @@ def get_all_local_slices(y, x, data, slices_prototype):
         slices.remove(slice)
     return slices
 
-#compte le nombre de tomates et de shrooms pour chaque part
+
+# compte le nombre de tomates et de shrooms pour chaque part
 def count_number_of_each_in_slice(slice_new, map_pizza):
     m = 0
     t = 0
@@ -49,7 +50,8 @@ def count_number_of_each_in_slice(slice_new, map_pizza):
                 t += 1
     return [m, t]
 
-#s'il n'y a pas assez d'un des deux ingredients, on supprime la part
+
+# s'il n'y a pas assez d'un des deux ingredients, on supprime la part
 
 
 def get_all_local_correct_slices(slices_list, meta, map_pizza):

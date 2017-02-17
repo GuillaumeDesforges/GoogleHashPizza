@@ -1,5 +1,6 @@
 from src import solver1
 
+
 def getData(name):
     with open("../assets/" + name + ".in", 'r') as file:
         meta = [int(k) for k in file.readline().split(" ")]
@@ -10,8 +11,8 @@ def getData(name):
 for name in [
     "example",
     "small",
-    "medium",
-    "big"
+    # "medium",
+    # "big"
 ]:
     print("Starting", name)
     data = getData(name)

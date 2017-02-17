@@ -3,6 +3,7 @@ from src import density
 from src import slicer
 from src import expander
 
+
 def solve(data):
     # extract data
     meta = data[0]
